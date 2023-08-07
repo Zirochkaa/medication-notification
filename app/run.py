@@ -37,7 +37,7 @@ async def on_startup():
 
     # Below import is required because handlers for commands and buttons has to be loaded.
     # Otherwise, sending commands and pushing on buttons will result in nothing.
-    import handlers
+    import handlers  # noqa: F401
 
 
 @app.post(settings.telegram_webhook_path(), include_in_schema=False)
