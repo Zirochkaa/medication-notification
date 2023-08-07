@@ -32,6 +32,8 @@ async def on_startup():
     webhook_url = settings.telegram_webhook_url()
     if webhook_info.url != webhook_url:
         assert await bot.set_webhook(url=webhook_url) is True, "Result of `set_webhook` has to be `True`."
+        webhook_info = await bot.get_webhook_info()
+        run_log.info(f"webhook_info updated: {webhook_info}.")
 
     await init_beanie(database=mongo_client[settings.mongo_db_name], document_models=__beanie_models__)
 
