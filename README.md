@@ -1,6 +1,6 @@
-# Medication reminder
+# Medication notification
 
-This repository contains pet project designed for sending reminders for taking medications :)
+This repository contains pet project - telegram bot designed for sending reminders (notifications) for taking medications :)
 
 ### Link to the working site here - [#todo]().
 
