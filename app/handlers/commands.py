@@ -76,7 +76,7 @@ async def newmedication_command_load_time(message: types.Message, state: FSMCont
     handlers_log.error(f"/newmedication load_time:\n{message}\n---")
     async with state.proxy() as data:
         name = data["name"]
-        medication = Medication(name=name, notification_time=message.text, user_id=message.from_user.id+100)
+        medication = Medication(name=name, notification_time=message.text, user_id=message.from_user.id)
         result = await medication.insert()
         handlers_log.info(f"Medication `{result.name}` was created - {result.id}.")
 
