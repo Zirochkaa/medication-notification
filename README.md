@@ -1,3 +1,5 @@
+[![pytest](https://github.com/Zirochkaa/medication-notification/actions/workflows/run_tests.yml/badge.svg?branch=master)](https://github.com/Zirochkaa/medication-notification/actions/workflows/run_tests.yml)
+
 # Medication notification
 
 This repository contains pet project - telegram bot designed for sending reminders (notifications) for taking medications :)
