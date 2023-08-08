@@ -4,7 +4,7 @@
 
 This repository contains pet project - telegram bot designed for sending reminders (notifications) for taking medications :)
 
-### Link to the working site here - [#todo]().
+### Link to the working telegram bot here - [@medication_notification_bot](https://t.me/medication_notification_bot).
 
 ## Run project locally
 
