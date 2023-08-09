@@ -1,1 +1,1 @@
-from handlers import commands  # noqa: F401
+from handlers import callbacks, commands  # noqa: F401

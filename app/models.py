@@ -1,3 +1,4 @@
+from __future__ import annotations
 from beanie import Document, Indexed
 
 
@@ -8,6 +9,10 @@ class Medication(Document):
 
     class Settings:
         name = "medications"
+
+    @classmethod
+    async def get_medications(cls, user_id: int) -> list[Medication]:
+        return await Medication.find({"user_id": user_id}).sort("notification_time").to_list()
 
 
 class User(Document):

@@ -4,8 +4,8 @@ from aiogram.dispatcher import FSMContext
 from bot import dp
 from handlers.states import NewMedicineStatesGroup
 from helpers import is_time_right_format
-from keyboards import get_medications_keyboard
-from loggers import handlers_log
+from keyboards import get_medication_list_keyboard
+from loggers import handlers_commands_log as logger
 from models import Medication, User
 from texts import (
     start_text,
@@ -13,7 +13,6 @@ from texts import (
     newmedication_choose_name_text, newmedication_choose_time_text,
     newmedication_finish, newmedication_wrong_time_text,
     mymedication_text, mymedication_empty_text,
-    deletemedication_text, deletemedication_empty_text
 )
 
 
@@ -22,12 +21,12 @@ async def start_command(message: types.Message):
     username = message.from_user.username
 
     if not await User.find({"username": username}).first_or_none():
-        handlers_log.info(f"User @{username} does not exist yet. Creating one ...")
+        logger.info(f"User @{username} does not exist yet. Creating one ...")
         user = User(username=username, user_id=message.from_user.id, chat_id=message.chat.id)
         result = await user.insert()
-        handlers_log.info(f"User @{username} was created - {result.id}.")
+        logger.info(f"User @{username} was created - {result.id}.")
     else:
-        handlers_log.info(f"User @{username} has already been created.")
+        logger.info(f"User @{username} has already been created.")
 
     await message.answer(text=start_text.format(username=username))
 
@@ -50,14 +49,14 @@ async def cancel_command(message: types.Message, state: FSMContext):
 
 @dp.message_handler(commands=['newmedication'])
 async def newmedication_command(message: types.Message):
-    handlers_log.error(f"/newmedication:\n{message}\n---")
+    logger.error(f"/newmedication:\n{message}\n---")
     await NewMedicineStatesGroup.next()
     await message.answer(text=newmedication_choose_name_text)
 
 
 @dp.message_handler(state=NewMedicineStatesGroup.name)
 async def newmedication_command_load_name(message: types.Message, state: FSMContext):
-    handlers_log.error(f"/newmedication load_name:\n{message}\n---")
+    logger.error(f"/newmedication load_name:\n{message}\n---")
     async with state.proxy() as data:
         data["name"] = message.text
 
@@ -67,18 +66,18 @@ async def newmedication_command_load_name(message: types.Message, state: FSMCont
 
 @dp.message_handler(lambda message: not is_time_right_format(message.text), state=NewMedicineStatesGroup.time)
 async def newmedication_command_check_time(message: types.Message):
-    handlers_log.error(f"/newmedication check_time:\n{message}\n---")
+    logger.error(f"/newmedication check_time:\n{message}\n---")
     await message.answer(text=newmedication_wrong_time_text, parse_mode="Markdown")
 
 
 @dp.message_handler(state=NewMedicineStatesGroup.time)
 async def newmedication_command_load_time(message: types.Message, state: FSMContext):
-    handlers_log.error(f"/newmedication load_time:\n{message}\n---")
+    logger.error(f"/newmedication load_time:\n{message}\n---")
     async with state.proxy() as data:
         name = data["name"]
         medication = Medication(name=name, notification_time=message.text, user_id=message.from_user.id)
         result = await medication.insert()
-        handlers_log.info(f"Medication `{result.name}` was created - {result.id}.")
+        logger.info(f"Medication `{result.name}` was created - {result.id}.")
 
         # TODO Create celery task here.
 
@@ -89,21 +88,10 @@ async def newmedication_command_load_time(message: types.Message, state: FSMCont
 
 @dp.message_handler(commands=['mymedication'])
 async def mymedication_command(message: types.Message):
-    handlers_log.error(f"/mymedication:\n{message}\n---")
-    medications = await Medication.find({"user_id": message.from_user.id}).sort("notification_time").to_list()
+    logger.error(f"/mymedication:\n{message}\n---")
+    medications = await Medication.get_medications(user_id=message.from_user.id)
 
     if not medications:
         await message.answer(text=mymedication_empty_text)
     else:
-        await message.answer(text=mymedication_text, reply_markup=get_medications_keyboard(medications))
-
-
-@dp.message_handler(commands=['deletemedication'])
-async def deletemedication_command(message: types.Message):
-    handlers_log.error(f"/deletemedication:\n{message}\n---")
-    medications = await Medication.find({"user_id": message.from_user.id}).sort("notification_time").to_list()
-
-    if not medications:
-        await message.answer(text=deletemedication_empty_text)
-    else:
-        await message.answer(text=deletemedication_text, reply_markup=get_medications_keyboard(medications))
+        await message.answer(text=mymedication_text, reply_markup=get_medication_list_keyboard(medications))

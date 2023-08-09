@@ -2,7 +2,6 @@ start_text = ("Hello, @{username}, I will help you with your medications.\n"
               "You can control me by sending these commands:\n\n"
               "/newmedication - create a new medication\n"
               "/mymedication - get a list of your medications and edit them\n"
-              "/deletemedication - delete a medication\n\n"
               "/cancel - cancel the operation\n\n"
               "/help - a list of available commands")
 
@@ -25,6 +24,8 @@ mymedication_text = "Choose a medication from the list below:"
 mymedication_empty_text = ("You currently have no medications. "
                            "Use /newmedication command to create a first medication.")
 
-deletemedication_text = "Choose a medication from the list below:"
-deletemedication_empty_text = ("You currently have no medications. "
-                               "If you want you can use /newmedication command to create a first medication.")
+medication_info_text = ("Here it is: `{name}` (`{time}`).\n"
+                        "What do you want to do with the medication?")
+
+medication_delete_confirm_text = "You are about to delete your bot `{name}` (`{time}`). Is that correct?"
+medication_delete_finish_text = "You have deleted `{name}` (`{time}`)."

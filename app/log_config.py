@@ -17,8 +17,8 @@ log_config = {
         },
     },
     "loggers": {
-        "handlers": {"handlers": ["default"], "level": "INFO"},
-        "mongodb": {"handlers": ["default"], "level": "INFO"},
+        "handlers.callbacks": {"handlers": ["default"], "level": "INFO"},
+        "handlers.commands": {"handlers": ["default"], "level": "INFO"},
         "run": {"handlers": ["default"], "level": "INFO"},
     },
 }
