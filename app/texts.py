@@ -14,8 +14,10 @@ newmedication_choose_name_text = ("Alright, a new medication. "
                                   "How are we going to call it? "
                                   "Please choose a name for your medication.")
 newmedication_choose_time_text = ("Good. Now let's choose time for reminder.It must be in `HH:MM` format. "
-                                  "Like this, for example: `09:00` or `13:30`")
-newmedication_wrong_time_text = "Sorry, time must be in `HH:MM` format, e.g., `09:00` or `13:30`."
+                                  "Like this, for example: `09:00` or `13:30`. "
+                                  "Also minutes must be divisible by 5, e.g., `16:25` and not `16:24`.")
+newmedication_wrong_time_text = ("Sorry, time must be in `HH:MM` format, e.g., `09:00` or `13:30`. "
+                                 "Also minutes must be divisible by 5, e.g., `16:25` and not `16:24`.")
 
 newmedication_finish = ("That's it. You've added `{name}` medication. "
                         "Each day at `{time}` you will receive a notification.")
