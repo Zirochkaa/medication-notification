@@ -1,4 +1,5 @@
 [![pytest](https://github.com/Zirochkaa/medication-notification/actions/workflows/run_tests.yml/badge.svg?branch=master)](https://github.com/Zirochkaa/medication-notification/actions/workflows/run_tests.yml)
+[![Coverage Status](https://coveralls.io/repos/github/Zirochkaa/medication-notification/badge.svg)](https://coveralls.io/github/Zirochkaa/medication-notification)
 
 # Medication notification
 
