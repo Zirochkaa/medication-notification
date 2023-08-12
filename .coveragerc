@@ -1,0 +1,2 @@
+[run]
+omit=app/bot.py,app/config.py,app/log_config.py,app/loggers.py,app/mongo_client.py,app/run.py,app/texts.py
