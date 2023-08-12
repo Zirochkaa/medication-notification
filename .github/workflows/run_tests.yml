@@ -24,3 +24,12 @@ jobs:
       - name: Lint with flake8
         run: |
           python -m flake8 . --count --max-line-length=120 --statistics
+      - name: Test with pytest
+        run: pytest --cov-config=.coveragerc --cov=app tests/
+        env:
+          FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
+          DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/save_favourite_color_test
+      - name: Upload coverage data to coveralls.io
+        run: coveralls --service=github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
