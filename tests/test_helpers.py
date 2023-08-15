@@ -1,6 +1,9 @@
+from datetime import datetime, date
+from typing import Union
+
 import pytest
 
-from app.helpers import is_time_right_format
+from app.helpers import is_time_right_format, dt_time_min, dt_time_max
 
 
 @pytest.mark.parametrize(
@@ -21,3 +24,37 @@ from app.helpers import is_time_right_format
 )
 def test_is_time_right_format(time_string: str, expected_result: bool):
     assert is_time_right_format(time_string) is expected_result
+
+
+@pytest.mark.parametrize(
+    "dt,expected_result",
+    (
+        (
+            date(year=2023, month=8, day=16),
+            datetime(year=2023, month=8, day=16, hour=0, minute=0)
+        ),
+        (
+            datetime(year=2023, month=8, day=16, hour=11, minute=39, second=1),
+            datetime(year=2023, month=8, day=16, hour=0, minute=0)
+        ),
+    )
+)
+def test_dt_time_min(dt: Union[datetime, date], expected_result: datetime):
+    assert dt_time_min(dt) == expected_result
+
+
+@pytest.mark.parametrize(
+    "dt,expected_result",
+    (
+        (
+            date(year=2023, month=8, day=16),
+            datetime(year=2023, month=8, day=16, hour=23, minute=59, second=59, microsecond=999999)
+        ),
+        (
+            datetime(year=2023, month=8, day=16, hour=11, minute=39, second=13, microsecond=123456),
+            datetime(year=2023, month=8, day=16, hour=23, minute=59, second=59, microsecond=999999)
+        ),
+    )
+)
+def test_dt_time_max(dt: Union[datetime, date], expected_result: datetime):
+    assert dt_time_max(dt) == expected_result
