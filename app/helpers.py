@@ -1,7 +1,9 @@
-from datetime import datetime
+from datetime import datetime, date, time
+from typing import Union
 
 
 TIME_FORMAT = "%H:%M"
+DATE_FORMAT = "%Y-%m-%d"
 
 
 def is_time_right_format(time_string: str) -> bool:
@@ -13,6 +15,22 @@ def is_time_right_format(time_string: str) -> bool:
         if len(time_string.split(":")[1]) != 2:
             return False
 
+        # TODO Time has to be between `01:00` and `23:00`.
+
         return t.minute % 5 == 0
     except ValueError:
         return False
+
+
+def dt_time_min(dt: Union[datetime, date]) -> datetime:
+    """
+    Converts any datetime/date to new datetime with same date and time=0:00:00
+    """
+    return datetime.combine(dt, time.min)
+
+
+def dt_time_max(dt: Union[datetime, date]) -> datetime:
+    """
+    Converts any datetime/date to new datetime with same date and time=23:59:59.999999
+    """
+    return datetime.combine(dt, time.max)

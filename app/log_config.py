@@ -20,5 +20,6 @@ log_config = {
         "handlers.callbacks": {"handlers": ["default"], "level": "INFO"},
         "handlers.commands": {"handlers": ["default"], "level": "INFO"},
         "run": {"handlers": ["default"], "level": "INFO"},
+        "tasks": {"handlers": ["default"], "level": "INFO"},
     },
 }

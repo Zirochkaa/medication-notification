@@ -1,28 +1,85 @@
 from __future__ import annotations
-from beanie import Document, Indexed
+
+from datetime import datetime
+from typing import Optional
+
+from beanie import Document, Indexed, Link
+from beanie.operators import GTE, LTE
+from helpers import TIME_FORMAT
+
+from helpers import dt_time_min, dt_time_max
 
 
 class Medication(Document):
+    user: Link[User]
     name: Indexed(str)
     notification_time: str
-    user_id: int
 
     class Settings:
         name = "medications"
 
     @classmethod
-    async def get_medications(cls, user_id: int) -> list[Medication]:
-        return await Medication.find({"user_id": user_id}).sort("notification_time").to_list()
+    async def get_medications(cls, tg_user_id: int) -> list[Medication]:
+        return await cls.find(
+            cls.user.tg_user_id == tg_user_id,
+            fetch_links=True
+        ).sort("notification_time").to_list()
+
+    @classmethod
+    async def get_medications_with_no_notifications(cls, tg_user_id: int, _date: datetime) -> list[Medication]:
+        return await cls.find(
+            cls.user.tg_user_id == tg_user_id,
+            Medication.notification_time <= _date.strftime(TIME_FORMAT),
+            fetch_links=True
+        ).sort("notification_time").to_list()
+
+
+class Notification(Document):
+    medication: Link[Medication]
+    sent_at: datetime
+
+    # `True` - means that notification was confirmed and medication was taken,
+    #          no need to send follow-up notification at 23:00.
+    # `False` - notification was not confirmed and medication was not taken,
+    #           need to send follow-up notification at 23:00.
+    was_taken: bool = False
+
+    tg_original_notification_id: Optional[int] = None  # `message_id` of message in telegram for notification
+    tg_original_notification_updated: bool = False
+
+    tg_followup_notification_id: Optional[int] = None  # `message_id` of followup message in telegram for notification
+    tg_followup_notification_updated: bool = False
+
+    @classmethod
+    async def get_current_day_notification(cls, medication: Medication, dt: datetime) -> Optional[Notification]:
+        return await cls.find(
+            cls.medication.id == medication.id,
+            GTE(cls.sent_at, dt_time_min(dt)),
+            LTE(cls.sent_at, dt_time_max(dt)),
+            fetch_links=True
+        ).first_or_none()
+
+    @classmethod
+    async def get_current_day_not_taken_notifications(cls, dt: datetime) -> list[Notification]:
+        return await cls.find(
+            cls.was_taken == False,  # noqa: E712
+            GTE(cls.sent_at, dt_time_min(dt)),
+            LTE(cls.sent_at, dt_time_max(dt)),
+            fetch_links=True
+        ).to_list()
+
+    class Settings:
+        name = "notifications"
 
 
 class User(Document):
     username: Indexed(str, unique=True)
-    user_id: int
-    chat_id: int
+    tg_user_id: int
+    tg_chat_id: int
 
     class Settings:
         name = "users"
 
 
 # All models to instantiate on load
-__beanie_models__ = [Medication, User]
+__beanie_models__ = [Medication, User, Notification]

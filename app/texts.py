@@ -31,3 +31,8 @@ medication_info_text = ("Here it is: `{name}` (`{time}`).\n"
 
 medication_delete_confirm_text = "You are about to delete your bot `{name}` (`{time}`). Is that correct?"
 medication_delete_finish_text = "You have deleted `{name}` (`{time}`)."
+
+medication_take_confirm_text = "It's time 💊. Please, take `{name}` medication on `{date}`."
+medication_take_followup_text = ("Hey, it's me again 💊. Seems like you forgot to take `{name}` on `{date}` 🤧. "
+                                 "Please, take it and press below button .")
+medication_take_finish_text = "Good job. You took `{name}` medication on `{date}` 💪"

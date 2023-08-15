@@ -9,7 +9,8 @@ from bot import dp, bot
 from log_config import log_config
 from loggers import run_log
 from models import __beanie_models__
-from mongo_client import mongo_client
+from mongo_client import mongo_client_async
+from scheduler import init_scheduler
 
 
 dictConfig(log_config)
@@ -35,11 +36,13 @@ async def on_startup():
         webhook_info = await bot.get_webhook_info()
         run_log.info(f"webhook_info updated: {webhook_info}.")
 
-    await init_beanie(database=mongo_client[settings.mongo_db_name], document_models=__beanie_models__)
+    await init_beanie(database=mongo_client_async[settings.mongo_db_name], document_models=__beanie_models__)
 
     # Below import is required because handlers for commands and buttons has to be loaded.
     # Otherwise, sending commands and pushing on buttons will result in nothing.
     import handlers  # noqa: F401
+
+    await init_scheduler()
 
 
 @app.post(settings.telegram_webhook_path(), include_in_schema=False)

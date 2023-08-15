@@ -20,9 +20,9 @@ from texts import (
 async def start_command(message: types.Message):
     username = message.from_user.username
 
-    if not await User.find({"username": username}).first_or_none():
+    if not await User.find(User.username == username).first_or_none():
         logger.info(f"User @{username} does not exist yet. Creating one ...")
-        user = User(username=username, user_id=message.from_user.id, chat_id=message.chat.id)
+        user = User(username=username, tg_user_id=message.from_user.id, tg_chat_id=message.chat.id)
         result = await user.insert()
         logger.info(f"User @{username} was created - {result.id}.")
     else:
@@ -75,11 +75,10 @@ async def newmedication_command_load_time(message: types.Message, state: FSMCont
     logger.error(f"/newmedication load_time:\n{message}\n---")
     async with state.proxy() as data:
         name = data["name"]
-        medication = Medication(name=name, notification_time=message.text, user_id=message.from_user.id)
-        result = await medication.insert()
-        logger.info(f"Medication `{result.name}` was created - {result.id}.")
-
-        # TODO Create celery task here.
+        user = await User.find_one(User.tg_user_id == message.from_user.id)
+        medication = Medication(name=name, notification_time=message.text, user=user)
+        medication = await medication.insert()
+        logger.info(f"Medication `{medication.name}` was created - {medication.id}.")
 
         await message.answer(text=newmedication_finish.format(name=name, time=message.text),
                              parse_mode="Markdown")
@@ -88,8 +87,8 @@ async def newmedication_command_load_time(message: types.Message, state: FSMCont
 
 @dp.message_handler(commands=['mymedication'])
 async def mymedication_command(message: types.Message):
-    logger.error(f"/mymedication:\n{message}\n---")
-    medications = await Medication.get_medications(user_id=message.from_user.id)
+    logger.error(f"/mymedication:\n{message}\n---{message.from_user.id}")
+    medications = await Medication.get_medications(tg_user_id=message.from_user.id)
 
     if not medications:
         await message.answer(text=mymedication_empty_text)
