@@ -60,9 +60,6 @@ If you want to check code coverage use following command:
    pytest --cov-config=.coveragerc --cov=app tests/
    ```
 
-## Tests
-#TODO fill this section
-
 ## Features
 #TODO fill this section
 
