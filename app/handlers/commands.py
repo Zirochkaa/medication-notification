@@ -16,7 +16,7 @@ from texts import (
 )
 
 
-@dp.message_handler(commands=['start'])
+@dp.message_handler(commands=["start"])
 async def start_command(message: types.Message):
     username = message.from_user.username
 
@@ -31,12 +31,12 @@ async def start_command(message: types.Message):
     await message.answer(text=start_text.format(username=username))
 
 
-@dp.message_handler(commands=['help'])
+@dp.message_handler(commands=["help"])
 async def help_command(message: types.Message):
     await message.answer(text=start_text.format(username=message.from_user.username))
 
 
-@dp.message_handler(commands=['cancel'], state="*")
+@dp.message_handler(commands=["cancel"], state="*")
 async def cancel_command(message: types.Message, state: FSMContext):
     current_state = await state.get_state()
     if current_state is None:
@@ -47,7 +47,12 @@ async def cancel_command(message: types.Message, state: FSMContext):
     await state.finish()
 
 
-@dp.message_handler(commands=['newmedication'])
+@dp.message_handler(commands=["history"])
+async def history_command(message: types.Message):
+    await message.answer(text="WIP get a list of last 7 dates when you took your medications.")
+
+
+@dp.message_handler(commands=["newmedication"])
 async def newmedication_command(message: types.Message):
     logger.error(f"/newmedication:\n{message}\n---")
     await NewMedicineStatesGroup.next()
@@ -85,7 +90,7 @@ async def newmedication_command_load_time(message: types.Message, state: FSMCont
     await state.finish()
 
 
-@dp.message_handler(commands=['mymedication'])
+@dp.message_handler(commands=["mymedication"])
 async def mymedication_command(message: types.Message):
     logger.error(f"/mymedication:\n{message}\n---{message.from_user.id}")
     medications = await Medication.get_medications(tg_user_id=message.from_user.id)

@@ -2,6 +2,7 @@ start_text = ("Hello, @{username}, I will help you with your medications.\n"
               "You can control me by sending these commands:\n\n"
               "/newmedication - create a new medication\n"
               "/mymedication - get a list of your medications and edit them\n"
+              "/history - WIP get a list of last 7 dates when you took your medications\n"
               "/cancel - cancel the operation\n\n"
               "/help - a list of available commands")
 
