@@ -50,6 +50,15 @@ You can achieve this by using [ngrok](https://ngrok.com). You need to [install](
 
 ## Tests
 
+To run tests use following command:
+   ```shell 
+   pytest tests/
+   ```
+
+If you want to check code coverage use following command:
+   ```shell 
+   pytest --cov-config=.coveragerc --cov=app tests/
+   ```
 
 ## Tests
 #TODO fill this section
