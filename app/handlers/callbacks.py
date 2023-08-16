@@ -51,7 +51,7 @@ async def med_delete_callback(callback: types.CallbackQuery, callback_data: dict
 @dp.callback_query_handler(med_delete_confirm.filter())
 async def med_delete_confirm_callback(callback: types.CallbackQuery, callback_data: dict):
     medication = await Medication.get(callback_data["medication_id"])
-    await medication.delete()
+    await medication.set({Medication.deleted: True})
     logger.info(f"Medication `{medication.name}` was deleted - {medication.id}.")
 
     text = medication_delete_finish_text.format(name=medication.name, time=medication.notification_time)
@@ -70,6 +70,8 @@ async def med_take_confirm_original_callback(callback: types.CallbackQuery, call
 
     text = medication_take_finish_text.format(name=notification.medication.name,
                                               date=notification.sent_at.strftime(DATE_FORMAT))
+
+    await callback.answer(text)
 
     # Update original notification.
     if notification.tg_original_notification_id and not notification.tg_original_notification_updated:
@@ -94,6 +96,8 @@ async def med_take_confirm_followup_callback(callback: types.CallbackQuery, call
 
     text = medication_take_finish_text.format(name=notification.medication.name,
                                               date=notification.sent_at.strftime(DATE_FORMAT))
+
+    await callback.answer(text)
 
     # Update followup notification.
     if notification.tg_followup_notification_id and not notification.tg_followup_notification_updated:

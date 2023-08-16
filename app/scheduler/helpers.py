@@ -19,7 +19,7 @@ async def check_notifications_for_user(user: User) -> None:
     medications = await Medication.get_medications_with_no_notifications(user.tg_user_id, _date)
 
     for medication in medications:
-        notification = await Notification.get_current_day_notification(medication, _date)
+        notification = await Notification.get_notification_for_current_day(medication, _date)
 
         if notification:
             logger.info(f"Notification for `{medication.id}` medication on {_date.date().strftime(DATE_FORMAT)} "

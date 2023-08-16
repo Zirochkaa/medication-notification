@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional
 
 from beanie import Document, Indexed, Link
-from beanie.operators import GTE, LTE
+from beanie.operators import GTE, LTE, In
 from helpers import TIME_FORMAT
 
 from helpers import dt_time_min, dt_time_max
@@ -14,6 +14,7 @@ class Medication(Document):
     user: Link[User]
     name: Indexed(str)
     notification_time: str
+    deleted: bool = False
 
     class Settings:
         name = "medications"
@@ -22,6 +23,7 @@ class Medication(Document):
     async def get_medications(cls, tg_user_id: int) -> list[Medication]:
         return await cls.find(
             cls.user.tg_user_id == tg_user_id,
+            In(cls.deleted, [False, None]),
             fetch_links=True
         ).sort("notification_time").to_list()
 
@@ -29,6 +31,7 @@ class Medication(Document):
     async def get_medications_with_no_notifications(cls, tg_user_id: int, _date: datetime) -> list[Medication]:
         return await cls.find(
             cls.user.tg_user_id == tg_user_id,
+            In(cls.deleted, [False, None]),
             Medication.notification_time <= _date.strftime(TIME_FORMAT),
             fetch_links=True
         ).sort("notification_time").to_list()
@@ -51,7 +54,7 @@ class Notification(Document):
     tg_followup_notification_updated: bool = False
 
     @classmethod
-    async def get_current_day_notification(cls, medication: Medication, dt: datetime) -> Optional[Notification]:
+    async def get_notification_for_current_day(cls, medication: Medication, dt: datetime) -> Optional[Notification]:
         return await cls.find(
             cls.medication.id == medication.id,
             GTE(cls.sent_at, dt_time_min(dt)),
@@ -60,7 +63,7 @@ class Notification(Document):
         ).first_or_none()
 
     @classmethod
-    async def get_current_day_not_taken_notifications(cls, dt: datetime) -> list[Notification]:
+    async def get_not_taken_notifications_for_current_day(cls, dt: datetime) -> list[Notification]:
         return await cls.find(
             cls.was_taken == False,  # noqa: E712
             GTE(cls.sent_at, dt_time_min(dt)),
