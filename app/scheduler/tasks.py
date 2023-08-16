@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from loggers import tasks_log as logger
-from models import User, Notification
-from scheduler.helpers import check_notifications_for_user, send_followup_notification
+from app.loggers import tasks_log as logger
+from app.models import User, Notification
+from app.scheduler.helpers import check_notifications_for_user, send_followup_notification
 
 
 async def check_notifications() -> None:

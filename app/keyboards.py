@@ -1,9 +1,9 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from handlers.callback_data import (
+from app.handlers.callback_data import (
     med_list, med_info, med_delete, med_delete_confirm, med_take_confirm_original, med_take_confirm_followup
 )
-from models import Medication
+from app.models import Medication
 
 
 def get_medication_list_keyboard(medications: list[Medication]) -> InlineKeyboardMarkup:

@@ -1,19 +1,19 @@
 from aiogram import types
 
-from bot import bot, dp
-from handlers.callback_data import (
+from app.bot import bot, dp
+from app.handlers.callback_data import (
     med_list, med_info, med_delete, med_delete_confirm, med_take_confirm_original, med_take_confirm_followup
 )
-from helpers import DATE_FORMAT
-from keyboards import (
+from app.helpers import DATE_FORMAT
+from app.keyboards import (
     get_medication_info_keyboard,
     get_medication_list_keyboard,
     get_medication_delete_confirmation_keyboard,
     get_medication_delete_finish_keyboard,
 )
-from loggers import handlers_callbacks_log as logger
-from models import Medication, Notification
-from texts import (
+from app.loggers import handlers_callbacks_log as logger
+from app.models import Medication, Notification
+from app.texts import (
     medication_info_text,
     medication_delete_confirm_text, medication_delete_finish_text,
     mymedication_empty_text, mymedication_text,

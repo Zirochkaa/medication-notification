@@ -1,13 +1,13 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
-from bot import dp
-from handlers.states import NewMedicineStatesGroup
-from helpers import is_time_right_format
-from keyboards import get_medication_list_keyboard
-from loggers import handlers_commands_log as logger
-from models import Medication, User
-from texts import (
+from app.bot import dp
+from app.handlers.states import NewMedicineStatesGroup
+from app.helpers import is_time_right_format
+from app.keyboards import get_medication_list_keyboard
+from app.loggers import handlers_commands_log as logger
+from app.models import Medication, User
+from app.texts import (
     start_text,
     cancel_text, cancel_empty_text,
     newmedication_choose_name_text, newmedication_choose_time_text,

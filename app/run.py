@@ -4,13 +4,13 @@ from aiogram import types, Dispatcher, Bot
 from beanie import init_beanie
 from fastapi import FastAPI
 
-from config import settings
-from bot import dp, bot
-from log_config import log_config
-from loggers import run_log
-from models import __beanie_models__
-from mongo_client import mongo_client_async
-from scheduler import init_scheduler
+from app.config import settings
+from app.bot import dp, bot
+from app.log_config import log_config
+from app.loggers import run_log
+from app.models import __beanie_models__
+from app.mongo_client import mongo_client_async
+from app.scheduler import init_scheduler
 
 
 dictConfig(log_config)
@@ -40,7 +40,7 @@ async def on_startup():
 
     # Below import is required because handlers for commands and buttons has to be loaded.
     # Otherwise, sending commands and pushing on buttons will result in nothing.
-    import handlers  # noqa: F401
+    import app.handlers  # noqa: F401
 
     await init_scheduler()
 

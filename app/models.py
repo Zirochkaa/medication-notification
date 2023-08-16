@@ -5,9 +5,8 @@ from typing import Optional
 
 from beanie import Document, Indexed, Link
 from beanie.operators import GTE, LTE, In
-from helpers import TIME_FORMAT
 
-from helpers import dt_time_min, dt_time_max
+from app.helpers import TIME_FORMAT, dt_time_min, dt_time_max
 
 
 class Medication(Document):

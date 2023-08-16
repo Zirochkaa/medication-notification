@@ -1,14 +1,14 @@
 from datetime import datetime
 
-from bot import bot
-from helpers import DATE_FORMAT
-from keyboards import (
+from app.bot import bot
+from app.helpers import DATE_FORMAT
+from app.keyboards import (
     get_medication_take_confirmation_original_keyboard,
     get_medication_take_confirmation_followup_keyboard,
 )
-from loggers import tasks_log as logger
-from models import Medication, Notification, User
-from texts import medication_take_confirm_text, medication_take_followup_text
+from app.loggers import tasks_log as logger
+from app.models import Medication, Notification, User
+from app.texts import medication_take_confirm_text, medication_take_followup_text
 
 
 async def check_notifications_for_user(user: User) -> None:

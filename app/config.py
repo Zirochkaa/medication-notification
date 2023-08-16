@@ -20,4 +20,4 @@ class Settings(BaseSettings):
         return f"{self.app_base_url}{self.telegram_webhook_path()}"
 
 
-settings = Settings()
+settings = Settings(_env_file="app/.env")

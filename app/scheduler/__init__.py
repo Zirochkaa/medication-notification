@@ -4,12 +4,12 @@ from apscheduler.executors.asyncio import AsyncIOExecutor
 from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from config import settings
-from mongo_client import mongo_client
+from app.config import settings
+from app.mongo_client import mongo_client
 
 
 async def init_scheduler() -> None:
-    from scheduler.tasks import check_notifications, send_followup_notifications
+    from app.scheduler.tasks import check_notifications, send_followup_notifications
 
     jobstores = {"default": MongoDBJobStore(database=settings.mongo_db_name, client=mongo_client)}
     executors = {"default": AsyncIOExecutor()}
