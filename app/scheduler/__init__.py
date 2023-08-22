@@ -19,6 +19,6 @@ async def init_scheduler() -> None:
     scheduler.add_job(check_notifications, "interval", id="check_for_notifications",
                       minutes=1, replace_existing=True)
     scheduler.add_job(send_followup_notifications, "cron", id="send_followup_notifications",
-                      hour=23, minute=15, replace_existing=True)
+                      hour=20, minute=15, replace_existing=True)
 
     scheduler.start()
