@@ -5,6 +5,7 @@ omit=
     app/config.py
     app/log_config.py
     app/loggers.py
+    app/logs_notifications.py
     app/mongo_client.py
     app/run.py
     app/texts.py
