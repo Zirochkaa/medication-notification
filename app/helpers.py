@@ -15,8 +15,11 @@ def is_time_right_format(time_string: str) -> bool:
         if len(time_string.split(":")[1]) != 2:
             return False
 
-        # TODO Time has to be between `01:00` and `23:00`.
+        # Time has to be between `05:00` and `19:55`.
+        if t.hour < 5 or t.hour > 19:
+            return False
 
+        # Minutes must be divisible by 5.
         return t.minute % 5 == 0
     except ValueError:
         return False

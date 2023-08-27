@@ -12,16 +12,25 @@ from app.helpers import (
     "time_string,expected_result",
     (
         ("00:0", False),
-        ("06:01", False),
         ("10:5", False),
         ("18:8", False),
+
+        ("00:00", False),
+        ("03:10", False),
+        ("06:01", False),
         ("20:33", False),
-        ("21:68", False),
+
+        ("04:55", False),
+        ("20:00", False),
+        ("22:55", False),
         ("23:59", False),
-        ("00:00", True),
-        ("03:10", True),
+
+        ("21:68", False),
+
+        ("05:00", True),
+        ("10:05", True),
         ("18:25", True),
-        ("22:55", True),
+        ("19:55", True),
     )
 )
 def test_is_time_right_format(time_string: str, expected_result: bool):
