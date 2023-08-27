@@ -61,6 +61,7 @@ class Notification(Document):
     ) -> list[Notification]:
         return await cls.find(
             cls.medication.user.tg_user_id == tg_user_id,
+            cls.was_taken == True,  # noqa: E712
             GTE(cls.sent_at, start_dt),
             LTE(cls.sent_at, end_dt),
             fetch_links=True
