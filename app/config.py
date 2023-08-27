@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     database_url: str = "mongodb://127.0.0.1:27017/medication_notification"
     mongo_db_name: str = "medication_notification"
 
+    history_days_amount: int = 7
+
     model_config = SettingsConfigDict(env_file=".env")
 
     def telegram_webhook_path(self) -> str:

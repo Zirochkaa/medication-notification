@@ -1,4 +1,4 @@
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from typing import Union
 
 
@@ -34,3 +34,17 @@ def dt_time_max(dt: Union[datetime, date]) -> datetime:
     Converts any datetime/date to new datetime with same date and time=23:59:59.999999
     """
     return datetime.combine(dt, time.max)
+
+
+def subtract_days_from_datetime(input_datetime: datetime, days_to_subtract: int) -> datetime:
+    """
+    Returns a new datetime that is the specified number of days earlier.
+    """
+    return input_datetime - timedelta(days=days_to_subtract)
+
+
+def get_dates_between(start_date: datetime, end_date: datetime) -> list[date]:
+    """
+    Get a list of all dates between the given start and end datetimes, inclusive.
+    """
+    return [(start_date + timedelta(days=i)).date() for i in range((end_date - start_date).days + 1)]

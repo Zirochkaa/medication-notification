@@ -53,6 +53,20 @@ class Notification(Document):
     tg_followup_notification_updated: bool = False
 
     @classmethod
+    async def get_notifications_for_time_period(
+        cls,
+        tg_user_id: int,
+        start_dt: datetime,
+        end_dt: datetime,
+    ) -> list[Notification]:
+        return await cls.find(
+            cls.medication.user.tg_user_id == tg_user_id,
+            GTE(cls.sent_at, start_dt),
+            LTE(cls.sent_at, end_dt),
+            fetch_links=True
+        ).sort("+sent_at").to_list()
+
+    @classmethod
     async def get_notification_for_current_day(cls, medication: Medication, dt: datetime) -> Optional[Notification]:
         return await cls.find(
             cls.medication.id == medication.id,

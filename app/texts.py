@@ -2,7 +2,7 @@ start_text = ("Hello, @{username}, I will help you with your medications.\n"
               "You can control me by sending these commands:\n\n"
               "/newmedication - create a new medication\n"
               "/mymedication - get a list of your medications and edit them\n"
-              "/history - WIP get a list of last 7 dates when you took your medications\n"
+              "/history - get info on whether you took your medications for the last {days_amount} days\n"
               "/cancel - cancel the operation\n\n"
               "/help - a list of available commands")
 
@@ -10,6 +10,14 @@ cancel_text = ("The command has been cancelled. "
                "Anything else I can do for you?\n\n"
                "Send /help for a list of commands.")
 cancel_empty_text = "No active command to cancel. I wasn't doing anything anyway. Zzzzz..."
+
+history_header_text = ("Here is your history for the last {days_amount} days "
+                       "between `{start_date}` and `{end_date}` dates:\n--------------------\n\n")
+history_empty_text = ("No medications were taken during last {days_amount} days "
+                      "between `{start_date}` and `{end_date}` dates.")
+history_whole_day_text = "`{date}`:\n{content}\n"
+history_whole_day_empty_text = "No medications were taken on this date :(\n"
+history_one_notification_text = "- {name}\n"
 
 newmedication_choose_name_text = ("Alright, a new medication. "
                                   "How are we going to call it? "

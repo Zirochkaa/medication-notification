@@ -1,15 +1,20 @@
+from datetime import datetime
+
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
 from app.bot import dp
+from app.config import settings
 from app.handlers.states import NewMedicineStatesGroup
-from app.helpers import is_time_right_format
+from app.helpers import is_time_right_format, subtract_days_from_datetime, dt_time_min, get_dates_between
 from app.keyboards import get_medication_list_keyboard
 from app.loggers import handlers_commands_log as logger
-from app.models import Medication, User
+from app.models import Medication, Notification, User
 from app.texts import (
     start_text,
     cancel_text, cancel_empty_text,
+    history_header_text, history_empty_text, history_whole_day_text,
+    history_whole_day_empty_text, history_one_notification_text,
     newmedication_choose_name_text, newmedication_choose_time_text,
     newmedication_finish, newmedication_wrong_time_text,
     mymedication_text, mymedication_empty_text,
@@ -28,12 +33,13 @@ async def start_command(message: types.Message):
     else:
         logger.info(f"User @{username} has already been created.")
 
-    await message.answer(text=start_text.format(username=username))
+    await message.answer(text=start_text.format(username=username, days_amount=settings.history_days_amount))
 
 
 @dp.message_handler(commands=["help"])
 async def help_command(message: types.Message):
-    await message.answer(text=start_text.format(username=message.from_user.username))
+    await message.answer(text=start_text.format(username=message.from_user.username,
+                                                days_amount=settings.history_days_amount))
 
 
 @dp.message_handler(commands=["cancel"], state="*")
@@ -49,7 +55,41 @@ async def cancel_command(message: types.Message, state: FSMContext):
 
 @dp.message_handler(commands=["history"])
 async def history_command(message: types.Message):
-    await message.answer(text="WIP get a list of last 7 dates when you took your medications.")
+    logger.error(f"/history:\n{message}\n---")
+
+    end_dt = datetime.now()
+    start_dt = dt_time_min(subtract_days_from_datetime(end_dt, settings.history_days_amount))
+    notifications = await Notification.get_notifications_for_time_period(
+        tg_user_id=message.from_user.id,
+        start_dt=start_dt,
+        end_dt=end_dt,
+    )
+
+    if not notifications:
+        text = history_empty_text.format(days_amount=settings.history_days_amount, start_date=start_dt, end_date=end_dt)
+        await message.answer(text=text, parse_mode="Markdown")
+        return
+
+    history_dates = get_dates_between(start_dt, end_dt)
+
+    text = ""
+    for _date in history_dates:
+        content = ""
+
+        for n in notifications:
+            if n.sent_at.date() != _date:
+                continue
+
+            content += history_one_notification_text.format(name=n.medication.name)
+
+        text += history_whole_day_text.format(date=_date, content=content or history_whole_day_empty_text)
+
+    text = history_header_text.format(
+        days_amount=settings.history_days_amount, start_date=start_dt, end_date=end_dt
+    ) + text if text else history_empty_text.format(
+        days_amount=settings.history_days_amount, start_date=start_dt, end_date=end_dt
+    )
+    await message.answer(text=text, parse_mode="Markdown")
 
 
 @dp.message_handler(commands=["newmedication"])

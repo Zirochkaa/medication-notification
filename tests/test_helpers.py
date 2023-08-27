@@ -3,7 +3,9 @@ from typing import Union
 
 import pytest
 
-from app.helpers import is_time_right_format, dt_time_min, dt_time_max
+from app.helpers import (
+    is_time_right_format, dt_time_min, dt_time_max, subtract_days_from_datetime, get_dates_between
+)
 
 
 @pytest.mark.parametrize(
@@ -58,3 +60,63 @@ def test_dt_time_min(dt: Union[datetime, date], expected_result: datetime):
 )
 def test_dt_time_max(dt: Union[datetime, date], expected_result: datetime):
     assert dt_time_max(dt) == expected_result
+
+
+@pytest.mark.parametrize(
+    "input_datetime,days_to_subtract,expected_result",
+    (
+        (
+            datetime(year=2023, month=8, day=27, hour=23, minute=59, second=59, microsecond=999999),
+            7,
+            datetime(year=2023, month=8, day=20, hour=23, minute=59, second=59, microsecond=999999)
+        ),
+        (
+            datetime(year=2023, month=8, day=27, hour=11, minute=39, second=13, microsecond=123456),
+            0,
+            datetime(year=2023, month=8, day=27, hour=11, minute=39, second=13, microsecond=123456),
+        ),
+    )
+)
+def test_subtract_days_from_datetime(input_datetime: datetime, days_to_subtract: int, expected_result: datetime):
+    assert subtract_days_from_datetime(input_datetime, days_to_subtract) == expected_result
+
+
+@pytest.mark.parametrize(
+    "start_date,end_date,expected_result",
+    (
+        (
+            datetime(year=2023, month=8, day=27, hour=2, minute=45, second=39, microsecond=999999),
+            datetime(year=2023, month=8, day=27, hour=23, minute=59, second=59, microsecond=999999),
+            [
+                date(year=2023, month=8, day=27),
+            ],
+        ),
+        (
+            datetime(year=2023, month=8, day=26, hour=2, minute=45, second=39, microsecond=999999),
+            datetime(year=2023, month=8, day=27, hour=23, minute=59, second=59, microsecond=999999),
+            [
+                date(year=2023, month=8, day=26),
+                date(year=2023, month=8, day=27),
+            ],
+        ),
+        (
+            datetime(year=2023, month=8, day=27, hour=2, minute=45, second=39, microsecond=999999),
+            datetime(year=2023, month=8, day=25, hour=23, minute=59, second=59, microsecond=999999),
+            [],
+        ),
+        (
+            datetime(year=2023, month=8, day=22, hour=2, minute=45, second=39, microsecond=999999),
+            datetime(year=2023, month=8, day=27, hour=23, minute=59, second=59, microsecond=999999),
+            [
+                date(year=2023, month=8, day=22),
+                date(year=2023, month=8, day=23),
+                date(year=2023, month=8, day=24),
+                date(year=2023, month=8, day=25),
+                date(year=2023, month=8, day=26),
+                date(year=2023, month=8, day=27),
+            ],
+        ),
+    )
+)
+def test_get_dates_between(start_date: datetime, end_date: datetime, expected_result: datetime):
+    assert get_dates_between(start_date, end_date) == expected_result
