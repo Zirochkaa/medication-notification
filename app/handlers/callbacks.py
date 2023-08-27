@@ -1,6 +1,7 @@
 from aiogram import types
 
 from app.bot import bot, dp
+from app.config import settings
 from app.handlers.callback_data import (
     med_list, med_info, med_delete, med_delete_confirm, med_take_confirm_original, med_take_confirm_followup
 )
@@ -12,6 +13,7 @@ from app.keyboards import (
     get_medication_delete_finish_keyboard,
 )
 from app.loggers import handlers_callbacks_log as logger
+from app.logs_notifications import notification_medication_taken
 from app.models import Medication, Notification
 from app.texts import (
     medication_info_text,
@@ -61,7 +63,7 @@ async def med_delete_confirm_callback(callback: types.CallbackQuery, callback_da
 
 @dp.callback_query_handler(med_take_confirm_original.filter())
 async def med_take_confirm_original_callback(callback: types.CallbackQuery, callback_data: dict):
-    logger.error(f"Received confirmation callback for ORIGINAL `{callback_data['notification_id']}` notification.")
+    logger.info(f"Received confirmation callback for ORIGINAL `{callback_data['notification_id']}` notification.")
 
     notification = await Notification.get(callback_data["notification_id"])
 
@@ -84,10 +86,14 @@ async def med_take_confirm_original_callback(callback: types.CallbackQuery, call
         await bot.edit_message_text(text, chat_id=notification.medication.user.tg_chat_id,
                                     message_id=notification.tg_followup_notification_id, parse_mode="Markdown")
 
+    if settings.telegram_channel_id:
+        await notification_medication_taken(notification.medication.user.username, notification.medication.name,
+                                            notification.sent_at.strftime(DATE_FORMAT))
+
 
 @dp.callback_query_handler(med_take_confirm_followup.filter())
 async def med_take_confirm_followup_callback(callback: types.CallbackQuery, callback_data: dict):
-    logger.error(f"Received confirmation callback for FOLLOWUP `{callback_data['notification_id']}` notification.")
+    logger.info(f"Received confirmation callback for FOLLOWUP `{callback_data['notification_id']}` notification.")
 
     notification = await Notification.get(callback_data["notification_id"])
 
@@ -109,3 +115,7 @@ async def med_take_confirm_followup_callback(callback: types.CallbackQuery, call
         await notification.set({Notification.tg_original_notification_updated: True})
         await bot.edit_message_text(text, chat_id=notification.medication.user.tg_chat_id,
                                     message_id=notification.tg_original_notification_id, parse_mode="Markdown")
+
+    if settings.telegram_channel_id:
+        await notification_medication_taken(notification.medication.user.username, notification.medication.name,
+                                            notification.sent_at.strftime(DATE_FORMAT))

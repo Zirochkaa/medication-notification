@@ -28,7 +28,10 @@ This repository contains pet project - telegram bot designed for sending reminde
 5. Obtain Telegram Bot Token by creating Telegram Bot. 
 [Here](https://core.telegram.org/bots/tutorial#obtain-your-bot-token) (`Obtain Your Bot Token` section) is a guide on how to do it. 
 Update `TELEGRAM_BOT_TOKEN` in `.env` file.
-6. This app uses a webhook approach to processing bot updates. 
+6. If you want to receive logs notifications (when user takes medication or when new user starts using bot) you need to fill `TELEGRAM_CHANNEL_ID` in `.env` file and you will receive logs notifications in telegram private channel.
+[Here](https://stackoverflow.com/a/56546442/7365971) is guide on how to obtain telegram private channel id.
+Update `TELEGRAM_CHANNEL_ID` in `.env` file.
+7. This app uses a webhook approach to processing bot updates. 
 In order to do it your localhost has to be put on the internet.
 You can achieve this by using [ngrok](https://ngrok.com). You need to [install](https://ngrok.com/download) it and run:
    ```shell 
@@ -38,11 +41,11 @@ You can achieve this by using [ngrok](https://ngrok.com). You need to [install](
 <img width="888" alt="image" src="https://github.com/Zirochkaa/save-favourite-color/assets/19872253/96b948fa-ea2e-4666-bb54-b3ff62dd878c">
 
    You will need to copy `Forwarding` part (for example, on the screenshot it will be `https://a71c-37-57-184-165.ngrok-free.app`) and update `APP_BASE_URL` in `.env` file.
-7. It's time to run application:
+8. It's time to run application:
    ```shell 
    uvicorn app.run:app --reload
    ```
-8. Go to [127.0.0.1:8000](http://127.0.0.1:8000) in your web browser.
+9. Go to [127.0.0.1:8000](http://127.0.0.1:8000) in your web browser.
 
 ## Tests
 

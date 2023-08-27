@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -7,6 +9,7 @@ class Settings(BaseSettings):
     app_base_url: str
 
     telegram_bot_token: str
+    telegram_channel_id: Optional[int] = None
 
     database_url: str = "mongodb://127.0.0.1:27017/medication_notification"
     mongo_db_name: str = "medication_notification"

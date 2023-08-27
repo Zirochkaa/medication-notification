@@ -45,3 +45,6 @@ medication_take_confirm_text = "It's time 💊. Please, take `{name}` medication
 medication_take_followup_text = ("Hey, it's me again 💊. Seems like you forgot to take `{name}` on `{date}` 🤧. "
                                  "Please, take it and press below button .")
 medication_take_finish_text = "Good job. You took `{name}` medication on `{date}` 💪"
+
+n_new_user_text = "@{username} just started using bot 🥳"
+n_medication_taken_text = "@{username} just took `{name}` medication on `{date}` date."

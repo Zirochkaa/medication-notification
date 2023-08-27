@@ -9,6 +9,7 @@ from app.handlers.states import NewMedicineStatesGroup
 from app.helpers import is_time_right_format, subtract_days_from_datetime, dt_time_min, get_dates_between
 from app.keyboards import get_medication_list_keyboard
 from app.loggers import handlers_commands_log as logger
+from app.logs_notifications import notification_new_user
 from app.models import Medication, Notification, User
 from app.texts import (
     start_text,
@@ -30,6 +31,9 @@ async def start_command(message: types.Message):
         user = User(username=username, tg_user_id=message.from_user.id, tg_chat_id=message.chat.id)
         result = await user.insert()
         logger.info(f"User @{username} was created - {result.id}.")
+
+        if settings.telegram_channel_id:
+            await notification_new_user(user.username)
     else:
         logger.info(f"User @{username} has already been created.")
 
