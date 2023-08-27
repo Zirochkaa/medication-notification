@@ -38,7 +38,7 @@ You can achieve this by using [ngrok](https://ngrok.com). You need to [install](
    ./ngrok http 8000
    ```
    After running above command you will see something like this: 
-<img width="888" alt="image" src="https://github.com/Zirochkaa/save-favourite-color/assets/19872253/96b948fa-ea2e-4666-bb54-b3ff62dd878c">
+<img width="829" alt="image" src="https://github.com/airbytehq/airbyte/assets/19872253/b1afc285-4fff-4f7f-b6fd-f03a67655b4c">
 
    You will need to copy `Forwarding` part (for example, on the screenshot it will be `https://a71c-37-57-184-165.ngrok-free.app`) and update `APP_BASE_URL` in `.env` file.
 8. It's time to run application:
