@@ -12,9 +12,10 @@ jobs:
     env:
       APP_BASE_URL: ${{ vars.APP_BASE_URL }}
       TELEGRAM_BOT_TOKEN: ${{ vars.TELEGRAM_BOT_TOKEN }}
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - name: Show vars
+      - name: Show variables
         run: |
           echo "APP_BASE_URL : $APP_BASE_URL"
           echo "TELEGRAM_BOT_TOKEN : $TELEGRAM_BOT_TOKEN"
@@ -39,7 +40,6 @@ jobs:
       - name: Test with pytest
         run: pytest --cov-config=.coveragerc --cov=app tests/
         env:
-          FLASK_SECRET_KEY: ${{ secrets.FLASK_SECRET_KEY }}
           DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/save_favourite_color_test
       - name: Upload coverage data to coveralls.io
         run: coveralls --service=github
