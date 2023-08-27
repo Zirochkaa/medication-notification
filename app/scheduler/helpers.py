@@ -6,7 +6,7 @@ from app.keyboards import (
     get_medication_take_confirmation_original_keyboard,
     get_medication_take_confirmation_followup_keyboard,
 )
-from app.loggers import tasks_log as logger
+from app.loggers import scheduler_helpers_log as logger
 from app.models import Medication, Notification, User
 from app.texts import medication_take_confirm_text, medication_take_followup_text
 

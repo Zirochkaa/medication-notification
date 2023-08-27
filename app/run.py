@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from app.config import settings
 from app.bot import dp, bot
 from app.log_config import log_config
-from app.loggers import run_log
+from app.loggers import run_log as logger
 from app.models import __beanie_models__
 from app.mongo_client import mongo_client_async
 from app.scheduler import init_scheduler
@@ -26,15 +26,15 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def on_startup():
-    run_log.info("On startup things.")
+    logger.info("On startup things.")
     webhook_info = await bot.get_webhook_info()
-    run_log.info(f"webhook_info: {webhook_info}.")
+    logger.info(f"webhook_info: {webhook_info}.")
 
     webhook_url = settings.telegram_webhook_url()
     if webhook_info.url != webhook_url:
         assert await bot.set_webhook(url=webhook_url) is True, "Result of `set_webhook` has to be `True`."
         webhook_info = await bot.get_webhook_info()
-        run_log.info(f"webhook_info updated: {webhook_info}.")
+        logger.info(f"webhook_info updated: {webhook_info}.")
 
     await init_beanie(database=mongo_client_async[settings.mongo_db_name], document_models=__beanie_models__)
 
@@ -47,7 +47,7 @@ async def on_startup():
 
 @app.post(settings.telegram_webhook_path(), include_in_schema=False)
 async def bot_webhook(update: dict):
-    run_log.info(f"Update object: {update}.")
+    logger.info(f"Update object: {update}.")
     telegram_update = types.Update(**update)
     Dispatcher.set_current(dp)
     Bot.set_current(bot)
@@ -56,6 +56,6 @@ async def bot_webhook(update: dict):
 
 @app.on_event("shutdown")
 async def on_shutdown():
-    run_log.info("On shutdown things.")
+    logger.info("On shutdown things.")
     session = await bot.get_session()
     await session.close()

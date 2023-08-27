@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from app.loggers import tasks_log as logger
+from app.loggers import scheduler_tasks_log as logger
 from app.models import User, Notification
 from app.scheduler.helpers import check_notifications_for_user, send_followup_notification
 
