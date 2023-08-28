@@ -65,15 +65,13 @@ async def med_delete_confirm_callback(callback: types.CallbackQuery, callback_da
 async def med_take_confirm_original_callback(callback: types.CallbackQuery, callback_data: dict):
     logger.info(f"Received confirmation callback for ORIGINAL `{callback_data['notification_id']}` notification.")
 
-    notification = await Notification.get(callback_data["notification_id"])
+    await callback.answer("Ok")
 
+    notification = await Notification.get(callback_data["notification_id"], fetch_links=True)
     await notification.set({Notification.was_taken: True})
-    await notification.fetch_all_links()
 
     text = medication_take_finish_text.format(name=notification.medication.name,
                                               date=notification.sent_at.strftime(DATE_FORMAT))
-
-    await callback.answer(text)
 
     # Update original notification.
     if notification.tg_original_notification_id and not notification.tg_original_notification_updated:
@@ -95,15 +93,13 @@ async def med_take_confirm_original_callback(callback: types.CallbackQuery, call
 async def med_take_confirm_followup_callback(callback: types.CallbackQuery, callback_data: dict):
     logger.info(f"Received confirmation callback for FOLLOWUP `{callback_data['notification_id']}` notification.")
 
-    notification = await Notification.get(callback_data["notification_id"])
+    await callback.answer("Ok")
 
+    notification = await Notification.get(callback_data["notification_id"], fetch_links=True)
     await notification.set({Notification.was_taken: True})
-    await notification.fetch_all_links()
 
     text = medication_take_finish_text.format(name=notification.medication.name,
                                               date=notification.sent_at.strftime(DATE_FORMAT))
-
-    await callback.answer(text)
 
     # Update followup notification.
     if notification.tg_followup_notification_id and not notification.tg_followup_notification_updated:
