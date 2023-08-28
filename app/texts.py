@@ -5,6 +5,7 @@ start_text = ("Hello, @{username}, I will help you with your medications.\n"
               "/history - get info on whether you took your medications for the last {days_amount} days\n"
               "/cancel - cancel the operation\n\n"
               "/help - a list of available commands")
+start_empty_username_text = "You do not have username 🙈"
 
 cancel_text = ("The command has been cancelled. "
                "Anything else I can do for you?\n\n"

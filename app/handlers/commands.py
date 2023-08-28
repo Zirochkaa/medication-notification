@@ -12,7 +12,7 @@ from app.loggers import handlers_commands_log as logger
 from app.logs_notifications import notification_new_user
 from app.models import Medication, Notification, User
 from app.texts import (
-    start_text,
+    start_text, start_empty_username_text,
     cancel_text, cancel_empty_text,
     history_header_text, history_empty_text, history_whole_day_text,
     history_whole_day_empty_text, history_one_notification_text,
@@ -24,6 +24,11 @@ from app.texts import (
 
 @dp.message_handler(commands=["start"])
 async def start_command(message: types.Message):
+    if message.from_user.username is None:
+        logger.warning(f"User `{message.from_user}` has no username.")
+        await message.answer(text=start_empty_username_text)
+        return
+
     username = message.from_user.username
 
     if not await User.find(User.username == username).first_or_none():
@@ -42,6 +47,11 @@ async def start_command(message: types.Message):
 
 @dp.message_handler(commands=["help"])
 async def help_command(message: types.Message):
+    if message.from_user.username is None:
+        logger.warning(f"User `{message.from_user}` has no username.")
+        await message.answer(text=start_empty_username_text)
+        return
+
     await message.answer(text=start_text.format(username=message.from_user.username,
                                                 days_amount=settings.history_days_amount))
 
@@ -136,7 +146,7 @@ async def newmedication_command_load_time(message: types.Message, state: FSMCont
 
 @dp.message_handler(commands=["mymedication"])
 async def mymedication_command(message: types.Message):
-    logger.error(f"/mymedication:\n{message}\n---{message.from_user.id}")
+    logger.error(f"/mymedication:\n{message}\n---")
     medications = await Medication.get_medications(tg_user_id=message.from_user.id)
 
     if not medications:
