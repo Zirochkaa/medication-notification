@@ -24,6 +24,8 @@ from app.texts import (
 
 @dp.message_handler(commands=["start"])
 async def start_command(message: types.Message):
+    logger.error(f"/start:\n{message}\n---")
+
     if message.from_user.username is None:
         logger.warning(f"User `{message.from_user}` has no username.")
         await message.answer(text=start_empty_username_text)
@@ -47,6 +49,8 @@ async def start_command(message: types.Message):
 
 @dp.message_handler(commands=["help"])
 async def help_command(message: types.Message):
+    logger.error(f"/help:\n{message}\n---")
+
     if message.from_user.username is None:
         logger.warning(f"User `{message.from_user}` has no username.")
         await message.answer(text=start_empty_username_text)
@@ -58,6 +62,8 @@ async def help_command(message: types.Message):
 
 @dp.message_handler(commands=["cancel"], state="*")
 async def cancel_command(message: types.Message, state: FSMContext):
+    logger.error(f"/cancel:\n{message}\n---")
+
     current_state = await state.get_state()
     if current_state is None:
         await message.answer(text=cancel_empty_text)

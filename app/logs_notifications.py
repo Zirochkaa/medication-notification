@@ -14,4 +14,5 @@ async def notification_medication_taken(username: str, medication_name: str, _da
     logger.info(f"Run `notification_medication_taken` for @{username} user and "
                 f"{medication_name} medication on {_date} date.")
     text = n_medication_taken_text.format(username=username, name=medication_name, date=_date)
+    logger.error(text)
     await bot.send_message(settings.telegram_channel_id, text=text, parse_mode="Markdown")
