@@ -87,7 +87,7 @@ async def history_command(message: types.Message):
 
     if not notifications:
         text = history_empty_text.format(days_amount=settings.history_days_amount, start_date=start_dt, end_date=end_dt)
-        await message.answer(text=text, parse_mode="Markdown")
+        await message.answer(text=text)
         return
 
     history_dates = get_dates_between(start_dt, end_dt)
@@ -109,7 +109,7 @@ async def history_command(message: types.Message):
     ) + text if text else history_empty_text.format(
         days_amount=settings.history_days_amount, start_date=start_dt, end_date=end_dt
     )
-    await message.answer(text=text, parse_mode="Markdown")
+    await message.answer(text=text)
 
 
 @dp.message_handler(commands=["newmedication"])
@@ -126,13 +126,13 @@ async def newmedication_command_load_name(message: types.Message, state: FSMCont
         data["name"] = message.text
 
     await NewMedicineStatesGroup.next()
-    await message.answer(text=newmedication_choose_time_text, parse_mode="Markdown")
+    await message.answer(text=newmedication_choose_time_text)
 
 
 @dp.message_handler(lambda message: not is_time_right_format(message.text), state=NewMedicineStatesGroup.time)
 async def newmedication_command_check_time(message: types.Message):
     logger.error(f"/newmedication check_time:\n{message}\n---")
-    await message.answer(text=newmedication_wrong_time_text, parse_mode="Markdown")
+    await message.answer(text=newmedication_wrong_time_text)
 
 
 @dp.message_handler(state=NewMedicineStatesGroup.time)
@@ -145,8 +145,7 @@ async def newmedication_command_load_time(message: types.Message, state: FSMCont
         medication = await medication.insert()
         logger.info(f"Medication `{medication.name}` was created - {medication.id}.")
 
-        await message.answer(text=newmedication_finish.format(name=name, time=message.text),
-                             parse_mode="Markdown")
+        await message.answer(text=newmedication_finish.format(name=name, time=message.text))
     await state.finish()
 
 

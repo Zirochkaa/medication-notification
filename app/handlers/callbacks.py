@@ -38,15 +38,14 @@ async def med_list_callback(callback: types.CallbackQuery):
 async def med_info_callback(callback: types.CallbackQuery, callback_data: dict):
     medication = await Medication.get(callback_data["medication_id"])
     text = medication_info_text.format(name=medication.name, time=medication.notification_time)
-    await callback.message.edit_text(text=text, parse_mode="Markdown",
-                                     reply_markup=get_medication_info_keyboard(str(medication.id)))
+    await callback.message.edit_text(text=text, reply_markup=get_medication_info_keyboard(str(medication.id)))
 
 
 @dp.callback_query_handler(med_delete.filter())
 async def med_delete_callback(callback: types.CallbackQuery, callback_data: dict):
     medication = await Medication.get(callback_data["medication_id"])
     text = medication_delete_confirm_text.format(name=medication.name, time=medication.notification_time)
-    await callback.message.edit_text(text=text, parse_mode="Markdown",
+    await callback.message.edit_text(text=text,
                                      reply_markup=get_medication_delete_confirmation_keyboard(str(medication.id)))
 
 
@@ -57,8 +56,7 @@ async def med_delete_confirm_callback(callback: types.CallbackQuery, callback_da
     logger.info(f"Medication `{medication.name}` was deleted - {medication.id}.")
 
     text = medication_delete_finish_text.format(name=medication.name, time=medication.notification_time)
-    await callback.message.edit_text(text, parse_mode="Markdown",
-                                     reply_markup=get_medication_delete_finish_keyboard())
+    await callback.message.edit_text(text, reply_markup=get_medication_delete_finish_keyboard())
 
 
 @dp.callback_query_handler(med_take_confirm_original.filter())
@@ -76,13 +74,13 @@ async def med_take_confirm_original_callback(callback: types.CallbackQuery, call
     # Update original notification.
     if notification.tg_original_notification_id and not notification.tg_original_notification_updated:
         await notification.set({Notification.tg_original_notification_updated: True})
-        await callback.message.edit_text(text, parse_mode="Markdown")
+        await callback.message.edit_text(text)
 
     # Update followup notification.
     if notification.tg_followup_notification_id and not notification.tg_followup_notification_updated:
         await notification.set({Notification.tg_followup_notification_updated: True})
         await bot.edit_message_text(text, chat_id=notification.medication.user.tg_chat_id,
-                                    message_id=notification.tg_followup_notification_id, parse_mode="Markdown")
+                                    message_id=notification.tg_followup_notification_id)
 
     if settings.telegram_channel_id:
         await notification_medication_taken(notification.medication.user.username, notification.medication.name,
@@ -104,13 +102,13 @@ async def med_take_confirm_followup_callback(callback: types.CallbackQuery, call
     # Update followup notification.
     if notification.tg_followup_notification_id and not notification.tg_followup_notification_updated:
         await notification.set({Notification.tg_followup_notification_updated: True})
-        await callback.message.edit_text(text, parse_mode="Markdown")
+        await callback.message.edit_text(text)
 
     # Update original notification.
     if notification.tg_original_notification_id and not notification.tg_original_notification_updated:
         await notification.set({Notification.tg_original_notification_updated: True})
         await bot.edit_message_text(text, chat_id=notification.medication.user.tg_chat_id,
-                                    message_id=notification.tg_original_notification_id, parse_mode="Markdown")
+                                    message_id=notification.tg_original_notification_id)
 
     if settings.telegram_channel_id:
         await notification_medication_taken(notification.medication.user.username, notification.medication.name,

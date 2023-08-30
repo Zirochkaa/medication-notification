@@ -40,7 +40,7 @@ async def send_initial_notification(user: User, medication: Medication) -> None:
 
     text = medication_take_confirm_text.format(name=medication.name, date=notification.sent_at.strftime(DATE_FORMAT))
     reply_markup = get_medication_take_confirmation_original_keyboard(str(notification.id))
-    message = await bot.send_message(user.tg_chat_id, text=text, reply_markup=reply_markup, parse_mode="Markdown")
+    message = await bot.send_message(user.tg_chat_id, text=text, reply_markup=reply_markup)
 
     await notification.set({Notification.tg_original_notification_id: message.message_id})
 
@@ -54,8 +54,7 @@ async def send_followup_notification(notification: Notification) -> None:
     text = medication_take_followup_text.format(name=notification.medication.name,
                                                 date=notification.sent_at.strftime(DATE_FORMAT))
     reply_markup = get_medication_take_confirmation_followup_keyboard(str(notification.id))
-    message = await bot.send_message(notification.medication.user.tg_chat_id, text=text,
-                                     reply_markup=reply_markup, parse_mode="Markdown")
+    message = await bot.send_message(notification.medication.user.tg_chat_id, text=text, reply_markup=reply_markup)
 
     await notification.set({Notification.tg_followup_notification_id: message.message_id})
 
