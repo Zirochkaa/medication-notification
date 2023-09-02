@@ -10,3 +10,4 @@ omit=
     app/run.py
     app/texts.py
     app/handlers/*
+    app/scheduler/*
