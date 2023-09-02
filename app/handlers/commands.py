@@ -79,7 +79,7 @@ async def history_command(message: types.Message):
 
     end_dt = datetime.now()
     start_dt = dt_time_min(subtract_days_from_datetime(end_dt, settings.history_days_amount))
-    notifications = await Notification.get_notifications_for_time_period(
+    notifications = await Notification.get_taken_notifications_for_time_period(
         tg_user_id=message.from_user.id,
         start_dt=start_dt,
         end_dt=end_dt,
@@ -93,16 +93,16 @@ async def history_command(message: types.Message):
     history_dates = get_dates_between(start_dt, end_dt)
 
     text = ""
-    for _date in history_dates:
+    for dt in history_dates:
         content = ""
 
         for n in notifications:
-            if n.sent_at.date() != _date:
+            if n.sent_at.date() != dt:
                 continue
 
             content += history_one_notification_text.format(name=n.medication.name)
 
-        text += history_whole_day_text.format(date=_date, content=content or history_whole_day_empty_text)
+        text += history_whole_day_text.format(date=dt, content=content or history_whole_day_empty_text)
 
     text = history_header_text.format(
         days_amount=settings.history_days_amount, start_date=start_dt, end_date=end_dt

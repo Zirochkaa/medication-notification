@@ -12,17 +12,17 @@ from app.texts import medication_take_confirm_text, medication_take_followup_tex
 
 
 async def check_notifications_for_user(user: User) -> None:
-    _date = datetime.now()
+    dt = datetime.now()
 
-    logger.info(f"Run `check_notifications_for_user` for `{user.username}` at {_date}.")
+    logger.info(f"Run `check_notifications_for_user` for `{user.username}` at {dt}.")
 
-    medications = await Medication.get_medications_with_no_notifications(user.tg_user_id, _date)
+    medications = await Medication.get_medications_ready_for_notifications(user.tg_user_id, dt)
 
     for medication in medications:
-        notification = await Notification.get_notification_for_current_day(medication, _date)
+        notification = await Notification.get_notification_for_current_day(medication, dt)
 
         if notification:
-            logger.info(f"Notification for `{medication.id}` medication on {_date.date().strftime(DATE_FORMAT)} "
+            logger.info(f"Notification for `{medication.id}` medication on {dt.date().strftime(DATE_FORMAT)} "
                         f"was already sent at {notification.sent_at}.")
             continue
 

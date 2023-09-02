@@ -27,11 +27,11 @@ class Medication(Document):
         ).sort("notification_time").to_list()
 
     @classmethod
-    async def get_medications_with_no_notifications(cls, tg_user_id: int, _date: datetime) -> list[Medication]:
+    async def get_medications_ready_for_notifications(cls, tg_user_id: int, dt: datetime) -> list[Medication]:
         return await cls.find(
             cls.user.tg_user_id == tg_user_id,
             In(cls.deleted, [False, None]),
-            Medication.notification_time <= _date.strftime(TIME_FORMAT),
+            cls.notification_time <= dt.strftime(TIME_FORMAT),
             fetch_links=True
         ).sort("notification_time").to_list()
 
@@ -53,7 +53,7 @@ class Notification(Document):
     tg_followup_notification_updated: bool = False
 
     @classmethod
-    async def get_notifications_for_time_period(
+    async def get_taken_notifications_for_time_period(
         cls,
         tg_user_id: int,
         start_dt: datetime,

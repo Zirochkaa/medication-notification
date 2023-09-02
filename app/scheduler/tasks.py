@@ -13,9 +13,9 @@ async def check_notifications() -> None:
 
 
 async def send_followup_notifications() -> None:
-    _date = datetime.now()
+    dt = datetime.now()
 
-    logger.info(f"Run TASK `send_followup_notifications` at {_date}.")
+    logger.info(f"Run TASK `send_followup_notifications` at {dt}.")
 
-    for notification in await Notification.get_not_taken_notifications_for_current_day(_date):
+    for notification in await Notification.get_not_taken_notifications_for_current_day(dt):
         await send_followup_notification(notification)

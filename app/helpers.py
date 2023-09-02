@@ -1,3 +1,5 @@
+import random
+import string
 from datetime import datetime, date, time, timedelta
 from typing import Union
 
@@ -51,3 +53,22 @@ def get_dates_between(start_date: datetime, end_date: datetime) -> list[date]:
     Get a list of all dates between the given start and end datetimes, inclusive.
     """
     return [(start_date + timedelta(days=i)).date() for i in range((end_date - start_date).days + 1)]
+
+
+def generate_notification_time() -> str:
+    """
+    Generate appropriate `notification_time` for `Medication` objects tests.
+    """
+    first_hour_digit = random.randint(0, 1)
+
+    # Available options for 0: 05, 06, 07, 08, 09
+    # Available options for 1: 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+    second_hour_digit = random.randint(5 if first_hour_digit == 0 else 0, 9)
+
+    minute_digit = random.randint(0, 5)
+
+    return f"{first_hour_digit}{second_hour_digit}:{minute_digit}5"
+
+
+def generate_random_string(a: int = 5, b: int = 20) -> str:
+    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=random.randint(a, b)))

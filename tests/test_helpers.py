@@ -4,7 +4,12 @@ from typing import Union
 import pytest
 
 from app.helpers import (
-    is_time_right_format, dt_time_min, dt_time_max, subtract_days_from_datetime, get_dates_between
+    is_time_right_format,
+    dt_time_min, dt_time_max,
+    subtract_days_from_datetime,
+    get_dates_between,
+    generate_notification_time,
+    generate_random_string,
 )
 
 
@@ -129,3 +134,20 @@ def test_subtract_days_from_datetime(input_datetime: datetime, days_to_subtract:
 )
 def test_get_dates_between(start_date: datetime, end_date: datetime, expected_result: datetime):
     assert get_dates_between(start_date, end_date) == expected_result
+
+
+def test_generate_notification_time():
+    for _ in range(100):
+        assert is_time_right_format(generate_notification_time()) is True
+
+
+@pytest.mark.parametrize(
+    "a,b",
+    (
+        (1, 2),
+        (5, 20),
+    )
+)
+def test_generate_random_string(a: int, b: int):
+    s = generate_random_string(a, b)
+    assert a <= len(s) <= b

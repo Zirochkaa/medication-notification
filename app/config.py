@@ -13,6 +13,7 @@ class Settings(BaseSettings):
 
     database_url: str = "mongodb://127.0.0.1:27017/medication_notification"
     mongo_db_name: str = "medication_notification"
+    mongo_db_name_test: str = "medication_notification_test"
 
     history_days_amount: int = 7
 

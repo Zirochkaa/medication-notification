@@ -4,14 +4,13 @@ from aiogram import types, Dispatcher, Bot
 from beanie import init_beanie
 from fastapi import FastAPI
 
-from app.config import settings
 from app.bot import dp, bot
+from app.config import settings
 from app.log_config import log_config
 from app.loggers import run_log as logger
 from app.models import __beanie_models__
 from app.mongo_client import mongo_client_async
 from app.scheduler import init_scheduler
-
 
 dictConfig(log_config)
 

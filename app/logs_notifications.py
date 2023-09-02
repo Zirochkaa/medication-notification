@@ -9,9 +9,9 @@ async def notification_new_user(username: str) -> None:
     await bot.send_message(settings.telegram_channel_id, text=n_new_user_text.format(username=username))
 
 
-async def notification_medication_taken(username: str, medication_name: str, _date: str) -> None:
+async def notification_medication_taken(username: str, medication_name: str, dt: str) -> None:
     logger.info(f"Run `notification_medication_taken` for @{username} user and "
-                f"{medication_name} medication on {_date} date.")
-    text = n_medication_taken_text.format(username=username, name=medication_name, date=_date)
+                f"{medication_name} medication on {dt} date.")
+    text = n_medication_taken_text.format(username=username, name=medication_name, date=dt)
     logger.error(text)
     await bot.send_message(settings.telegram_channel_id, text=text)
