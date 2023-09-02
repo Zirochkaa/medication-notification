@@ -9,5 +9,6 @@ omit=
     app/mongo_client.py
     app/run.py
     app/texts.py
+    app/keyboards.py
     app/handlers/*
     app/scheduler/*
