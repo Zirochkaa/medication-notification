@@ -9,4 +9,4 @@ omit=
     app/mongo_client.py
     app/run.py
     app/texts.py
-    app/handlers/states.py
+    app/handlers/*
