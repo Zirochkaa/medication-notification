@@ -37,7 +37,7 @@ jobs:
         with:
           mongodb-version: '6.0'
       - name: Test with pytest
-        run: pytest --cov-config=.coveragerc --cov=app tests/ -v
+        run: pytest --cov-config=.coveragerc --cov=app tests/ --disable-warnings -v
         env:
           DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/save_favourite_color_test
       - name: Upload coverage data to coveralls.io
