@@ -32,7 +32,6 @@ jobs:
       - name: Test with pytest
         run: pytest tests/ --cov-config=.coveragerc --cov=app --disable-warnings
         env:
-          DATABASE_URL_TEST: postgresql://postgres:postgres@localhost:5432/save_favourite_color_test
           APP_BASE_URL: ${{ vars.APP_BASE_URL }}
           TELEGRAM_BOT_TOKEN: ${{ vars.TELEGRAM_BOT_TOKEN }}
       - name: Upload coverage data to coveralls.io
