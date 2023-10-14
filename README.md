@@ -3,6 +3,8 @@
 
 # Medication notification
 
+## TODO Migrate to aiogram v3 using [Migration FAQ (2.x -> 3.0)](https://docs.aiogram.dev/en/dev-3.x/migration_2_to_3.html) guide.
+
 This repository contains pet project - telegram bot designed for sending reminders (notifications) for taking medications :)
 
 ### Link to the working telegram bot here - [@medication_notification_bot](https://t.me/medication_notification_bot).
