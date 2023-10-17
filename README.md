@@ -60,17 +60,3 @@ If you want to check code coverage use following command:
    ```shell 
    pytest --cov-config=.coveragerc --cov=app tests/
    ```
-
-## Features
-#TODO fill this section
-
-Right now the site offers following features:
-- [ ] First feature.
-- [ ] Second feature.
-
-## TODOs
-#TODO fill this section
-
-Below is a list of what needs to be done:
-- [ ] First todo.
-- [ ] Second todo.
