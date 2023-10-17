@@ -1,6 +1,7 @@
 from logging.config import dictConfig
 
 from aiogram import types, Dispatcher, Bot
+from aiogram.utils.exceptions import InvalidQueryID
 from beanie import init_beanie
 from fastapi import FastAPI
 
@@ -11,6 +12,7 @@ from app.loggers import run_log as logger
 from app.models import __beanie_models__
 from app.mongo_client import mongo_client_async
 from app.scheduler import init_scheduler
+from app.exception_handlers import invalid_query_id_exception_handler
 
 dictConfig(log_config)
 
@@ -21,6 +23,8 @@ app = FastAPI(
     version="0.0.1",
     docs_url="/api/v1/docs",
 )
+
+app.add_exception_handler(InvalidQueryID, invalid_query_id_exception_handler)
 
 
 @app.on_event("startup")

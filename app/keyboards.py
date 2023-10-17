@@ -23,6 +23,7 @@ def get_medication_info_keyboard(medication_id: str) -> InlineKeyboardMarkup:
     Generate a keyboard for medication info.
     """
     k = InlineKeyboardMarkup()
+    # TODO Add button for showing latest date medication was taken.
     k.add(InlineKeyboardButton("Delete Medication", callback_data=med_delete.new(medication_id)))
     k.add(InlineKeyboardButton("<< Back to Medications List", callback_data=med_list.new()))
     return k

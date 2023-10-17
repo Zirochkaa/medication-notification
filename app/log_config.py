@@ -19,8 +19,10 @@ log_config = {
     "loggers": {
         "handlers.callbacks": {"handlers": ["default"], "level": "INFO"},
         "handlers.commands": {"handlers": ["default"], "level": "INFO"},
-        "run": {"handlers": ["default"], "level": "INFO"},
         "scheduler.helpers": {"handlers": ["default"], "level": "INFO"},
         "scheduler.tasks": {"handlers": ["default"], "level": "INFO"},
+        "exception_handlers": {"handlers": ["default"], "level": "INFO"},
+        "logs_notifications": {"handlers": ["default"], "level": "INFO"},
+        "run": {"handlers": ["default"], "level": "INFO"},
     },
 }
