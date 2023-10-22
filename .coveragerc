@@ -1,14 +1,15 @@
 [run]
 omit=
-    app/tests/*
+    app/handlers/*
+    app/scheduler/*
     app/bot.py
     app/config.py
+    app/exception_handlers.py
+    app/keyboards.py
     app/log_config.py
     app/loggers.py
     app/logs_notifications.py
     app/mongo_client.py
     app/run.py
     app/texts.py
-    app/keyboards.py
-    app/handlers/*
-    app/scheduler/*
+    */__init__.py
