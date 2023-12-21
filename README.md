@@ -43,6 +43,7 @@ You can achieve this by using [ngrok](https://ngrok.com). You need to [install](
 <img width="829" alt="image" src="https://github.com/airbytehq/airbyte/assets/19872253/b1afc285-4fff-4f7f-b6fd-f03a67655b4c">
 
    You will need to copy `Forwarding` part (for example, on the screenshot it will be `https://03d2-146-70-181-35.ngrok-free.app`) and update `APP_BASE_URL` in `.env` file.
+
 8. It's time to run application:
    ```shell 
    uvicorn app.run:app --reload
