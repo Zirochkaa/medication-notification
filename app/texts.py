@@ -43,6 +43,7 @@ mymedication_empty_text = ("You currently have no medications. "
 
 medication_info_text = ("Here it is: <code>{name}</code> (<code>{time}</code>).\n"
                         "What do you want to do with the medication?")
+medication_no_longer_available_text = "Medication no longer available."
 
 medication_delete_confirm_text = ("You are about to delete your bot <code>{name}</code> (<code>{time}</code>). "
                                   "Is that correct?")

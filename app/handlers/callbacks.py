@@ -20,6 +20,7 @@ from app.texts import (
     medication_delete_confirm_text, medication_delete_finish_text,
     mymedication_empty_text, mymedication_text,
     medication_take_finish_text,
+    medication_no_longer_available_text,
 )
 
 
@@ -37,6 +38,10 @@ async def med_list_callback(callback: types.CallbackQuery):
 @dp.callback_query_handler(med_info.filter())
 async def med_info_callback(callback: types.CallbackQuery, callback_data: dict):
     medication = await Medication.get(callback_data["medication_id"])
+    if not medication:
+        await callback.message.edit_text(medication_no_longer_available_text)
+        return
+
     text = medication_info_text.format(name=medication.name, time=medication.notification_time)
     await callback.message.edit_text(text=text, reply_markup=get_medication_info_keyboard(str(medication.id)))
 
@@ -44,6 +49,10 @@ async def med_info_callback(callback: types.CallbackQuery, callback_data: dict):
 @dp.callback_query_handler(med_delete.filter())
 async def med_delete_callback(callback: types.CallbackQuery, callback_data: dict):
     medication = await Medication.get(callback_data["medication_id"])
+    if not medication:
+        await callback.message.edit_text(medication_no_longer_available_text)
+        return
+
     text = medication_delete_confirm_text.format(name=medication.name, time=medication.notification_time)
     await callback.message.edit_text(text=text,
                                      reply_markup=get_medication_delete_confirmation_keyboard(str(medication.id)))
@@ -52,7 +61,12 @@ async def med_delete_callback(callback: types.CallbackQuery, callback_data: dict
 @dp.callback_query_handler(med_delete_confirm.filter())
 async def med_delete_confirm_callback(callback: types.CallbackQuery, callback_data: dict):
     medication = await Medication.get(callback_data["medication_id"])
+    if not medication:
+        await callback.message.edit_text(medication_no_longer_available_text)
+        return
+
     await medication.set({Medication.deleted: True})
+
     logger.info(f"Medication `{medication.name}` was deleted - {medication.id}.")
 
     text = medication_delete_finish_text.format(name=medication.name, time=medication.notification_time)
@@ -66,6 +80,10 @@ async def med_take_confirm_original_callback(callback: types.CallbackQuery, call
     await callback.answer("Ok")
 
     notification = await Notification.get(callback_data["notification_id"], fetch_links=True)
+    if not notification:
+        await callback.message.edit_text(medication_no_longer_available_text)
+        return
+
     await notification.set({Notification.was_taken: True})
 
     text = medication_take_finish_text.format(name=notification.medication.name,
@@ -94,6 +112,10 @@ async def med_take_confirm_followup_callback(callback: types.CallbackQuery, call
     await callback.answer("Ok")
 
     notification = await Notification.get(callback_data["notification_id"], fetch_links=True)
+    if not notification:
+        await callback.message.edit_text(medication_no_longer_available_text)
+        return
+
     await notification.set({Notification.was_taken: True})
 
     text = medication_take_finish_text.format(name=notification.medication.name,
